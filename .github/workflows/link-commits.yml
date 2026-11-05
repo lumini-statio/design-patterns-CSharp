@@ -1,0 +1,32 @@
+name: Link commits to issues
+on:
+  push:
+    branches: ['**']
+
+permissions:
+  issues: write
+
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+            for (const c of context.payload.commits) {
+              const issues = new Set(
+                [...c.message.matchAll(/(?<![\w/])#(\d+)/g)].map(m => Number(m[1]))
+              );
+              for (const n of issues) {
+                try {
+                  await github.rest.issues.createComment({
+                    ...context.repo,
+                    issue_number: n,
+                    body: `Commit [\`${c.id.slice(0,7)}\`](${c.url}) en \`${branch}\` por @${c.author.username ?? c.author.name}:\n> ${c.message.split('\n')[0]}`
+                  });
+                } catch (e) {
+                  core.warning(`No se pudo comentar en #${n}: ${e.message}`);
+                }
+              }
+            }
