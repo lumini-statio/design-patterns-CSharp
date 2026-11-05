@@ -1,5 +1,13 @@
 using strategy;
 
+// Una tienda online ofrece tres formas de envío: estándar ($1000 por kg), express ($1800
+// por kg) y retiro en local (sin cargo). En el checkout, el cliente puede cambiar de opción
+// todas las veces que quiera antes de pagar.
+
+// El área comercial avisó que cada mes habrá promociones de envío con reglas nuevas. El
+// pedido tiene que calcular su costo de envío sin if ni switch según el tipo de envío, y sumar
+// una forma de envío no debe obligar a modificar el pedido
+
 OnlineStore onlineStore = new OnlineStore();
 
 Shipment shipment1 = new StandarShipment(3);
