@@ -3,15 +3,9 @@
 public abstract class ApproveLevel : Handler
 {
     private Handler _next;
-    public Handler Next
+    public virtual bool callNext(double expense)
     {
-        get { return _next; }
-        set { _next = value; }
-    }
-    
-    public virtual void callNext(double expense)
-    {
-        _next.handle(expense);
+        return _next.handle(expense);
     }
     public abstract bool handle(double expense);
     public void setNext(Handler handler)
